@@ -1,0 +1,3 @@
+displayName = Regrowth Replant!
+author = Edoan
+version = 1.0
