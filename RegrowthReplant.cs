@@ -71,6 +71,15 @@ namespace RegrowthReplant
             var tile = Terraria.Main.tile[targetX, targetY];
             int style = tile.TileFrameX / 18;
 
+            bool isImmature = tile.TileType == Terraria.ID.TileID.ImmatureHerbs;
+
+            // Prevent staff of regrowth breaking immature herbs.
+            // This will prevent from breaking then placing and then breaking again the herb tile on pots or herbs plaftorms.
+            if (isImmature && self.inventory[self.selectedItem].type == Terraria.ID.ItemID.StaffofRegrowth)
+            {
+                return false;
+            }
+
             var shouldPlace = RegrowthReplant.IsHarvestable(tile, self);
 
             // After this Invoke the tile might be null, because might be destroyed.
@@ -81,6 +90,7 @@ namespace RegrowthReplant
             {
                 // Place the seed.
                 Terraria.WorldGen.PlaceTile(i: targetX, j: targetY, Type: Terraria.ID.TileID.ImmatureHerbs, style: style);
+
                 if (Terraria.Main.netMode == Terraria.ID.NetmodeID.MultiplayerClient)
                 {
                     Terraria.NetMessage.SendTileSquare(-1, targetX, targetY, Terraria.ID.TileChangeType.None);

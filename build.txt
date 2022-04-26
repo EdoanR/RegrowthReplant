@@ -1,3 +1,4 @@
 displayName = Regrowth Replant!
 author = Edoan
 version = 1.0
+homepage = https://github.com/Zennos/RegrowthReplant
