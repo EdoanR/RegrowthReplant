@@ -81,6 +81,11 @@ namespace RegrowthReplant
             {
                 // Place the seed.
                 Terraria.WorldGen.PlaceTile(i: targetX, j: targetY, Type: Terraria.ID.TileID.ImmatureHerbs, style: style);
+                if (Terraria.Main.netMode == Terraria.ID.NetmodeID.MultiplayerClient)
+                {
+                    Terraria.NetMessage.SendTileSquare(-1, targetX, targetY, Terraria.ID.TileChangeType.None);
+                }
+                
             }
 
             return canPlace;
