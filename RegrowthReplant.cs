@@ -76,7 +76,7 @@ namespace RegrowthReplant
             bool isImmature = tile.TileType == Terraria.ID.TileID.ImmatureHerbs;
 
             // Prevent staff of regrowth breaking immature herbs.
-            // This will prevent from breaking then placing and then breaking again the herb tile on pots or herbs plaftorms.
+            // This will prevent from placing the herb and breaking it at the same time on tiles that are not pots or planter box.
             if (isImmature && self.inventory[self.selectedItem].type == Terraria.ID.ItemID.StaffofRegrowth)
             {
                 return false;
