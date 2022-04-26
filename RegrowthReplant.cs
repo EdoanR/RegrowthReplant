@@ -5,6 +5,17 @@ namespace RegrowthReplant
 {
     public class RegrowthReplant : Mod
     {
+        public enum HerbStyle
+        {
+            Daybloom = 0,
+            Moonglow = 1,
+            Blinkroot = 2,
+            Deathweed = 3,
+            Waterleaf = 4,
+            Fireblossom = 5,
+            Shiverthorn = 6
+        }
+
         public override void Load()
         {
             On.Terraria.Player.PlaceThing_Tiles_BlockPlacementForAssortedThings += Player_PlaceThing_Tiles_BlockPlacementForAssortedThings;
@@ -12,15 +23,6 @@ namespace RegrowthReplant
 
             // Immature Herb Tile ID = 82
             // Grown Herb Tile ID    = 83 (84 for Blinkroot and Shiverthorn)
-
-            // Style of each herb. (Got from the .placeStyle of each seed item)
-            // Daybloom = 0
-            // Moonglow = 1
-            // Blinkroot = 2
-            // Deathweed = 3
-            // Waterleaf = 4
-            // Fireblossom = 5
-            // Shiverthorn = 6
 
         }
 
@@ -38,7 +40,7 @@ namespace RegrowthReplant
                 int style = tileCache.TileFrameX / 18;
                 dropItem = Terraria.ID.ItemID.Daybloom + style;
                 int seedID = Terraria.ID.ItemID.DaybloomSeeds + style;
-                if (style == 6)
+                if (style == (int)HerbStyle.Shiverthorn)
                 {
                     dropItem = Terraria.ID.ItemID.Shiverthorn;
                     seedID = Terraria.ID.ItemID.ShiverthornSeeds;
