@@ -18,8 +18,8 @@ namespace RegrowthReplant
 
         public override void Load()
         {
-            On.Terraria.Player.PlaceThing_Tiles_BlockPlacementForAssortedThings += Player_PlaceThing_Tiles_BlockPlacementForAssortedThings;
-            On.Terraria.WorldGen.KillTile_GetItemDrops += WorldGen_KillTile_GetItemDrops;
+            Terraria.On_Player.PlaceThing_Tiles_BlockPlacementForAssortedThings += Player_PlaceThing_Tiles_BlockPlacementForAssortedThings;
+            Terraria.On_WorldGen.KillTile_GetItemDrops += WorldGen_KillTile_GetItemDrops;
 
             // Immature Herb Tile ID = 82
             // Grown Herb Tile ID    = 83 (84 for Blinkroot and Shiverthorn)
@@ -27,7 +27,7 @@ namespace RegrowthReplant
         }
 
         // This is to change the amount of seeds that herbs can drop.
-        private void WorldGen_KillTile_GetItemDrops(On.Terraria.WorldGen.orig_KillTile_GetItemDrops orig, int x, int y, Terraria.Tile tileCache, out int dropItem, out int dropItemStack, out int secondaryItem, out int secondaryItemStack, bool includeLargeObjectDrops)
+        private void WorldGen_KillTile_GetItemDrops(Terraria.On_WorldGen.orig_KillTile_GetItemDrops orig, int x, int y, Terraria.Tile tileCache, out int dropItem, out int dropItemStack, out int secondaryItem, out int secondaryItemStack, bool includeLargeObjectDrops)
         {
             secondaryItem = 0;
             secondaryItemStack = 1;
@@ -64,7 +64,7 @@ namespace RegrowthReplant
         }
 
         // This is to change the effect of the Staff of Regrowth.
-        private bool Player_PlaceThing_Tiles_BlockPlacementForAssortedThings(On.Terraria.Player.orig_PlaceThing_Tiles_BlockPlacementForAssortedThings orig, Terraria.Player self, bool canPlace)
+        private bool Player_PlaceThing_Tiles_BlockPlacementForAssortedThings(Terraria.On_Player.orig_PlaceThing_Tiles_BlockPlacementForAssortedThings orig, Terraria.Player self, bool canPlace)
         {
 
             int targetX = Terraria.Player.tileTargetX;
