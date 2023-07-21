@@ -1,7 +1,11 @@
 ﻿<img align="right" width="148px" src="https://github.com/Zennos/RegrowthReplant/blob/master/icon.png?raw=true">
 
-# Regrowth Replant!
+# Regrowth Replant! 
 Staff of Regrowth automatically replant harvested herbs!
+
+<a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2800099326" alt="Steam Workshop">
+  <img src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-steam-workshop.jross.me%2F2800099326&style=for-the-badge" alt="Steam Workshop downloads">
+</a>
 
 ## Notes
 - Does not support modded herbs (Idk how to do it).
