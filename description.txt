@@ -1,7 +1,9 @@
-Staff of Regrowth automatically replant harvested herbs!
+[i:213] [i:5295] [i:313] [i:315] [i:314] [i:316] [i:2358] [i:317] [i:318] 
 
-Notes: 
-- Does not support modded herbs (Idk how to do it).
-- Staff of Regrowth will no longer break immature herbs in blocks that are not pot or platform, this is to prevent an issue of placing the seed and breaking it at the same time.
+Staff and Axe of Regrowth automatically replant harvested herbs!
 
-You can contribute! Github Repository: https://github.com/Zennos/RegrowthReplant
+[c/6f6fff:v2.1.0]
+- added support for Axe of Regrowth
+
+You can contribute! 
+Github Repository: https://github.com/Zennos/RegrowthReplant
