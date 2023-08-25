@@ -32,8 +32,8 @@ namespace RegrowthReplant
             secondaryItem = 0;
             secondaryItemStack = 1;
 
-            var player = RegrowthReplant.GetPlayerForTile(x, y);
-            bool shouldModifyDrop = RegrowthReplant.IsHarvestable(tileCache, player);
+            var player = GetPlayerForTile(x, y);
+            bool shouldModifyDrop = IsHarvestable(tileCache, player);
 
             if (shouldModifyDrop)
             {
@@ -74,15 +74,16 @@ namespace RegrowthReplant
             int style = tile.TileFrameX / 18;
 
             bool isImmature = tile.TileType == Terraria.ID.TileID.ImmatureHerbs;
+            bool isUsingRegrowthItems = self.inventory[self.selectedItem].type == Terraria.ID.ItemID.StaffofRegrowth || self.inventory[self.selectedItem].type == Terraria.ID.ItemID.AcornAxe;
 
             // Prevent staff of regrowth breaking immature herbs.
             // This will prevent from placing the herb and breaking it at the same time on tiles that are not pots or planter box.
-            if (isImmature && self.inventory[self.selectedItem].type == Terraria.ID.ItemID.StaffofRegrowth)
+            if (isImmature && isUsingRegrowthItems)
             {
                 return false;
             }
 
-            var shouldPlace = RegrowthReplant.IsHarvestable(tile, self);
+            var shouldPlace = IsHarvestable(tile, self);
 
             // After this Invoke the tile might be null, because might be destroyed.
             // Because of that is important to get the info and check before this.
@@ -110,8 +111,10 @@ namespace RegrowthReplant
 
             int style = tile.TileFrameX / 18;
 
-            // Player is not using the Staff of Regrowth.
-            if (player.inventory[player.selectedItem].type != Terraria.ID.ItemID.StaffofRegrowth) return false;
+            bool isUsingRegrowthItems = player.inventory[player.selectedItem].type == Terraria.ID.ItemID.StaffofRegrowth || player.inventory[player.selectedItem].type == Terraria.ID.ItemID.AcornAxe;
+
+            // Player is not using a regrowth item.
+            if (!isUsingRegrowthItems) return false;
 
             // Checking if the tile is a herb and if is ready to harvest.
             if (tile.TileType != Terraria.ID.TileID.MatureHerbs && tile.TileType != Terraria.ID.TileID.BloomingHerbs)
