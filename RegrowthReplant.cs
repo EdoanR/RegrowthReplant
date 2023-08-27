@@ -1,5 +1,9 @@
 using Microsoft.Xna.Framework;
+using System;
+using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ObjectData;
 
 namespace RegrowthReplant
 {
@@ -16,14 +20,87 @@ namespace RegrowthReplant
             Shiverthorn = 6
         }
 
+        public enum GemTreeStyle
+        {
+            Topaz = 0,
+            Amethyst = 1,
+            Sapphire = 2,
+            Emerald = 3,
+            Ruby = 4,
+            Diamond = 5,
+            Amber = 6
+        }
+
         public override void Load()
         {
             Terraria.On_Player.PlaceThing_Tiles_BlockPlacementForAssortedThings += Player_PlaceThing_Tiles_BlockPlacementForAssortedThings;
             Terraria.On_WorldGen.KillTile_GetItemDrops += WorldGen_KillTile_GetItemDrops;
+            Terraria.On_Player.ItemCheck_UseMiningTools_ActuallyUseMiningTool += On_Player_ItemCheck_UseMiningTools_ActuallyUseMiningTool;
+        }
 
-            // Immature Herb Tile ID = 82
-            // Grown Herb Tile ID    = 83 (84 for Blinkroot and Shiverthorn)
+        private void On_Player_ItemCheck_UseMiningTools_ActuallyUseMiningTool(On_Player.orig_ItemCheck_UseMiningTools_ActuallyUseMiningTool orig, Player self, Item sItem, out bool canHitWalls, int x, int y)
+        {
+            // Check if should replant gemcorns.
 
+            Tile tile = Main.tile[x, y];
+            int cachedTileType = tile.TileType;
+
+            bool flag = TileID.Sets.CountsAsGemTree[tile.TileType] && Main.tileAxe[tile.TileType] && sItem.type == ItemID.AcornAxe;
+
+            orig.Invoke(self, sItem, out canHitWalls, x, y);
+
+            if (flag && tile.TileType == 0)
+            {
+                int gemStyle = GetGemTreeStyleFromTile(cachedTileType);
+                if (gemStyle == -1) return;
+
+                TryReplatingGemTree(self, x, y, gemStyle);
+            }
+        }
+
+        private static int GetGemTreeStyleFromTile(int tileType)
+        {
+            switch (tileType)
+            {
+                case TileID.TreeTopaz:
+                    return (int)GemTreeStyle.Topaz;
+                case TileID.TreeAmethyst:
+                    return (int)GemTreeStyle.Amethyst;
+                case TileID.TreeSapphire:
+                    return (int)GemTreeStyle.Sapphire;
+                case TileID.TreeEmerald:
+                    return (int)GemTreeStyle.Emerald;
+                case TileID.TreeRuby:
+                    return (int)GemTreeStyle.Ruby;
+                case TileID.TreeDiamond:
+                    return (int)GemTreeStyle.Diamond;
+                case TileID.TreeAmber:
+                    return (int)GemTreeStyle.Amber;
+                default:
+                    return -1;
+            }
+        }
+
+        private static void TryReplatingGemTree(Player player, int x, int y, int gemStyle = 0)
+        {
+            int type = TileID.GemSaplings;
+            int style = gemStyle;
+
+            PlantLoader.CheckAndInjectModSapling(x, y, ref type, ref style);
+            if (!TileObject.CanPlace(Player.tileTargetX, Player.tileTargetY, type, style, player.direction, out var objectData))
+            {
+                return;
+            }
+            bool num = TileObject.Place(objectData);
+            WorldGen.SquareTileFrame(Player.tileTargetX, Player.tileTargetY);
+            if (num)
+            {
+                TileObjectData.CallPostPlacementPlayerHook(Player.tileTargetX, Player.tileTargetY, type, style, player.direction, objectData.alternate, objectData);
+                if (Main.netMode == 1)
+                {
+                    NetMessage.SendObjectPlacement(-1, Player.tileTargetX, Player.tileTargetY, objectData.type, objectData.style, objectData.alternate, objectData.random, player.direction);
+                }
+            }
         }
 
         // This is to change the amount of seeds that herbs can drop.
