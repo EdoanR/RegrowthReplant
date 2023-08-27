@@ -33,9 +33,9 @@ namespace RegrowthReplant
 
         public override void Load()
         {
-            Terraria.On_Player.PlaceThing_Tiles_BlockPlacementForAssortedThings += Player_PlaceThing_Tiles_BlockPlacementForAssortedThings;
-            Terraria.On_WorldGen.KillTile_GetItemDrops += WorldGen_KillTile_GetItemDrops;
-            Terraria.On_Player.ItemCheck_UseMiningTools_ActuallyUseMiningTool += On_Player_ItemCheck_UseMiningTools_ActuallyUseMiningTool;
+            On_Player.PlaceThing_Tiles_BlockPlacementForAssortedThings += Player_PlaceThing_Tiles_BlockPlacementForAssortedThings;
+            On_WorldGen.KillTile_GetItemDrops += WorldGen_KillTile_GetItemDrops;
+            On_Player.ItemCheck_UseMiningTools_ActuallyUseMiningTool += On_Player_ItemCheck_UseMiningTools_ActuallyUseMiningTool;
         }
 
         private void On_Player_ItemCheck_UseMiningTools_ActuallyUseMiningTool(On_Player.orig_ItemCheck_UseMiningTools_ActuallyUseMiningTool orig, Player self, Item sItem, out bool canHitWalls, int x, int y)
@@ -96,7 +96,7 @@ namespace RegrowthReplant
             if (num)
             {
                 TileObjectData.CallPostPlacementPlayerHook(Player.tileTargetX, Player.tileTargetY, type, style, player.direction, objectData.alternate, objectData);
-                if (Main.netMode == 1)
+                if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
                     NetMessage.SendObjectPlacement(-1, Player.tileTargetX, Player.tileTargetY, objectData.type, objectData.style, objectData.alternate, objectData.random, player.direction);
                 }
@@ -115,17 +115,17 @@ namespace RegrowthReplant
             if (shouldModifyDrop)
             {
                 int style = tileCache.TileFrameX / 18;
-                dropItem = Terraria.ID.ItemID.Daybloom + style;
-                int seedID = Terraria.ID.ItemID.DaybloomSeeds + style;
+                dropItem = ItemID.Daybloom + style;
+                int seedID = ItemID.DaybloomSeeds + style;
                 if (style == (int)HerbStyle.Shiverthorn)
                 {
-                    dropItem = Terraria.ID.ItemID.Shiverthorn;
-                    seedID = Terraria.ID.ItemID.ShiverthornSeeds;
+                    dropItem = ItemID.Shiverthorn;
+                    seedID = ItemID.ShiverthornSeeds;
                 }
 
-                dropItemStack = Terraria.Main.rand.Next(1, 3);
+                dropItemStack = Main.rand.Next(1, 3);
 
-                int seedAmount = Terraria.Main.rand.Next(0, 5); // Original value: 1, 6
+                int seedAmount = Main.rand.Next(0, 5); // Original value: 1, 6
                 if (seedAmount > 0)
                 {
                     secondaryItem = seedID;
@@ -144,14 +144,14 @@ namespace RegrowthReplant
         private bool Player_PlaceThing_Tiles_BlockPlacementForAssortedThings(Terraria.On_Player.orig_PlaceThing_Tiles_BlockPlacementForAssortedThings orig, Terraria.Player self, bool canPlace)
         {
 
-            int targetX = Terraria.Player.tileTargetX;
-            int targetY = Terraria.Player.tileTargetY;
+            int targetX = Player.tileTargetX;
+            int targetY = Player.tileTargetY;
 
-            var tile = Terraria.Main.tile[targetX, targetY];
+            var tile = Main.tile[targetX, targetY];
             int style = tile.TileFrameX / 18;
 
-            bool isImmature = tile.TileType == Terraria.ID.TileID.ImmatureHerbs;
-            bool isUsingRegrowthItems = self.inventory[self.selectedItem].type == Terraria.ID.ItemID.StaffofRegrowth || self.inventory[self.selectedItem].type == Terraria.ID.ItemID.AcornAxe;
+            bool isImmature = tile.TileType == TileID.ImmatureHerbs;
+            bool isUsingRegrowthItems = self.inventory[self.selectedItem].type == ItemID.StaffofRegrowth || self.inventory[self.selectedItem].type == ItemID.AcornAxe;
 
             // Prevent staff of regrowth breaking immature herbs.
             // This will prevent from placing the herb and breaking it at the same time on tiles that are not pots or planter box.
@@ -169,11 +169,11 @@ namespace RegrowthReplant
             if (!canPlace && shouldPlace)
             {
                 // Place the seed.
-                Terraria.WorldGen.PlaceTile(i: targetX, j: targetY, Type: Terraria.ID.TileID.ImmatureHerbs, style: style);
+                WorldGen.PlaceTile(i: targetX, j: targetY, Type: TileID.ImmatureHerbs, style: style);
 
-                if (Terraria.Main.netMode == Terraria.ID.NetmodeID.MultiplayerClient)
+                if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
-                    Terraria.NetMessage.SendTileSquare(-1, targetX, targetY, Terraria.ID.TileChangeType.None);
+                    NetMessage.SendTileSquare(-1, targetX, targetY, TileChangeType.None);
                 }
                 
             }
@@ -188,17 +188,17 @@ namespace RegrowthReplant
 
             int style = tile.TileFrameX / 18;
 
-            bool isUsingRegrowthItems = player.inventory[player.selectedItem].type == Terraria.ID.ItemID.StaffofRegrowth || player.inventory[player.selectedItem].type == Terraria.ID.ItemID.AcornAxe;
+            bool isUsingRegrowthItems = player.inventory[player.selectedItem].type == ItemID.StaffofRegrowth || player.inventory[player.selectedItem].type == ItemID.AcornAxe;
 
             // Player is not using a regrowth item.
             if (!isUsingRegrowthItems) return false;
 
             // Checking if the tile is a herb and if is ready to harvest.
-            if (tile.TileType != Terraria.ID.TileID.MatureHerbs && tile.TileType != Terraria.ID.TileID.BloomingHerbs)
+            if (tile.TileType != TileID.MatureHerbs && tile.TileType != TileID.BloomingHerbs)
             {
                 return false;
             }
-            bool harvestable = Terraria.WorldGen.IsHarvestableHerbWithSeed(tile.TileType, style);
+            bool harvestable = WorldGen.IsHarvestableHerbWithSeed(tile.TileType, style);
             if (!harvestable) return false;
 
             // Can safely replant the seed!
@@ -206,6 +206,6 @@ namespace RegrowthReplant
         }
 
         // This is the same as the Terraria.Worldgen.GetPlayerForTile, but inaccessible for being private.
-        private static Terraria.Player GetPlayerForTile(int x, int y) => Terraria.Main.player[Terraria.Player.FindClosest(new Vector2(x, y) * 16f, 16, 16)];
+        private static Terraria.Player GetPlayerForTile(int x, int y) => Main.player[Player.FindClosest(new Vector2(x, y) * 16f, 16, 16)];
     }
 }
