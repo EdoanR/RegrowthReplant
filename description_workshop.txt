@@ -1,4 +1,7 @@
-Staff and Axe of Regrowth automatically replant harvested herbs!
+Staff and Axe of Regrowth automatically replant harvested herbs and gem trees!
+
+[b]v2.2.0[/b]
+- Axe of Regrowth now can replant gem trees
 
 [b]v2.1.0[/b]
 - added support for Axe of Regrowth
