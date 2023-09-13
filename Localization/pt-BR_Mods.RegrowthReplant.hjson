@@ -1,0 +1,24 @@
+Configs: {
+	OnlyOwner: Apenas o dono do servidor pode alterar essas configurações.
+
+	RegrowthReplantServerConfig: {
+		DisplayName: Opções
+
+		ReplantHerbs: {
+			Label: Replantar ervas automaticamente
+			Tooltip: ""
+		}
+
+		ReplantGemcorns: {
+			Label: Replantar árvores de joias
+			Tooltip: ""
+		}
+
+		AxeUseSeedFromInventory: {
+			Label: Usar bolotas do inventário
+			Tooltip: Quando ativado, bolotas do seu inventário serão usada para replantar árvores de joias
+		}
+
+		Headers.AxeOfRegrowthSection: "[i:5295] {$ItemName.AcornAxe}"
+	}
+}

@@ -1,0 +1,24 @@
+Configs: {
+	OnlyOwner: Only the server owner can change this config.
+
+	RegrowthReplantServerConfig: {
+		DisplayName: Settings
+
+		ReplantHerbs: {
+			Label: Enable herbs replanting
+			Tooltip: ""
+		}
+
+		ReplantGemcorns: {
+			Label: Enable gemcorns replanting
+			Tooltip: ""
+		}
+
+		AxeUseSeedFromInventory: {
+			Label: Use seed from inventory
+			Tooltip: When enabled, it will use gemcorns seeds from your inventory to replant
+		}
+
+		Headers.AxeOfRegrowthSection: "[i:5295] {$ItemName.AcornAxe}"
+	}
+}
