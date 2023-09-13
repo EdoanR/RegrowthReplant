@@ -2,6 +2,12 @@
 
 Staff and Axe of Regrowth automatically replant harvested herbs and gem trees!
 
+[c/6f6fff:v2.3.0]
+- Add options. (all enabled by default)
+- toggle herbs replating
+- toggle gemcorns replating
+- use gemcorns from inventory
+
 [c/6f6fff:v2.2.0]
 - Axe of Regrowth now can replant gem trees
 
